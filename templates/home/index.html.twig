@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Support - Ouvrir un ticket{% endblock %}
+
+{% block body %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+<div class="container mt-5">
+
+    <h1 class="mb-4">Ouvrir une demande d'assistance</h1>
+
+    {# Affichage du message #}
+    {% include 'partials/_flash.html.twig' %}
+
+    {# Affichage du formulaire #}
+    <div class="card p-4 shadow-sm">
+
+
+        {{ form_start(form) }}
+
+            {# <div class="alert alert-danger">
+                {{ form_errors(form) }}
+                {{ form_errors(form.description) }}
+            </div> #}
+
+            <div class="mb-3">
+                {{ form_row(form.auteur) }}         
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.categorie) }}   
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.description) }}
+            </div>
+
+            <button type="submit" class="btn btn-secondary">Envoyer</button>
+
+        {{ form_end(form) }}
+    </div>
+
+    {# Bouton de connexion #}
+    <div class="mt-4">
+        <a href="{{ path('app_login') }}" class="btn btn-primary">Connexion</a>
+    </div>
+
+</div>
+{% endblock %}
+

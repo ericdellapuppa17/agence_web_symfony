@@ -1,3 +1,20 @@
+@import "../vendor/bootstrap/dist/css/bootstrap.min.css";
+
 body {
-    background-color: skyblue;
+    background-color: #faf9f4;
+}
+
+select:invalid {
+    color: #8a8a8a;
+    font-style: italic;
+}
+
+select option[value=""] {
+    color: #8a8a8a;
+    font-style: italic;
+}
+
+select option:not([value=""]) {
+    color: #000;
+    font-style: normal;
 }
