@@ -12,6 +12,22 @@
         {% endblock %}
     </head>
     <body>
+        {# Message aux utilisateurs connectés #}
+        {% if app.user %}
+
+            <nav class="navbar navbar-light bg-light border-bottom mb-4 px-3">
+                <span class="navbar-text">
+                    Bonjour <strong>{{ app.user.email }}</strong>
+                </span>
+                <form action="{{ path('app_logout') }}" method="post" class="m-0">
+                    <button class="btn btn-danger btn-sm">
+                        Déconnexion
+                    </button>
+                </form>
+            </nav>
+            
+        {% endif %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

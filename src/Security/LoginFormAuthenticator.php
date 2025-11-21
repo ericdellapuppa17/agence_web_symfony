@@ -27,16 +27,35 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function authenticate(Request $request): Passport
-    {
-        $email = $request->getPayload()->getString('email');
+    {   
+        // Récupération des champs du formulaire POST de login
+        $email = $request->request->get('email', '');
+        $password = $request->request->get('password', '');
+        $csrfToken = $request->request->get('_csrf_token', '');
+
+        if ($email === '' && $password === '' && $csrfToken === '') {
+            $content = $request->getContent();
+            if ($content) {
+                $data = json_decode($content, true);
+                if (is_array($data)) {
+                    $email = $data['email'] ?? $email;
+                    $password = $data['password'] ?? $password;
+                    $csrfToken = $data['_csfr_token'] ?? $csrfToken;
+                }
+            }
+        }
+
+        // $email = $request->getPayload()->getString('email') ?: $request->request->get('email', '');
+        // $password = $request->getPayload()->getString('password') ?: $request->request->get('password', '');
+        // $csrfToken = $request->getPayload()->getString('_csrf_token') ?: $request->request->get('_csrf_token', '');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $csrfToken),
                 new RememberMeBadge(),
             ]
         );
@@ -48,9 +67,9 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        // redirection par défaut sur tableau de bord Agent
+        return new RedirectResponse($this->urlGenerator->generate('agent_ticket_index'));
+        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
     protected function getLoginUrl(Request $request): string

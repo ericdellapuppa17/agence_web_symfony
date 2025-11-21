@@ -76,7 +76,7 @@ class Ticket
         return $this->auteur;
     }
 
-    public function setAuteur(string $auteur): static
+    public function setAuteur(?string $auteur): static
     {
         $this->auteur = $auteur;
 
@@ -112,7 +112,7 @@ class Ticket
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 

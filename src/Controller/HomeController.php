@@ -13,7 +13,7 @@ use App\Entity\Ticket;
 
 final class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
+    #[Route('/', name: 'home', methods: ['GET', 'POST'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         // formulaire de saisie de ticket client
@@ -21,7 +21,7 @@ final class HomeController extends AbstractController
 
         $form = $this->createForm(TicketPublicType::class, $ticket);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             // Date d'ouverture et statut 'Ouvert' déjà géré dans __construct
             $em->persist($ticket);
@@ -30,13 +30,11 @@ final class HomeController extends AbstractController
             $this->addFlash('success', 'Votre demande a bien été enregistrée !');
 
             return $this->redirectToRoute('home');
-        } else {
-            dump($form->getErrors(true, false));
         }
 
         return $this->render('home/index.html.twig', [
-            'form' => $form->createView(),
-            // 'form' => $form,
+            // 'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }

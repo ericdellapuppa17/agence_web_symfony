@@ -16,7 +16,7 @@
                 </div>
             {% endif %}
 
-            <form method="post" class="card p-4 shadow-sm">
+            <form method="post" action="{{ path('app_login') }}" class="card p-4 shadow-sm">
             
                 <div class="mb-3">
                     <label for="inputEmail" class="form-label">Email</label>
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <input type="checkbox" name="_remeber_me" class="form-check-input" id="rememberMe">
+                    <input type="checkbox" name="_remember_me" class="form-check-input" id="rememberMe">
                     <label for="rememberMe" class="form-check-label">Se souvenir de moi</label>
                 </div>
 

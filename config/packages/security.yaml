@@ -16,7 +16,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+            custom_authenticators: 
+                - App\Security\LoginFormAuthenticator
+            
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -38,9 +40,13 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
+    role_hierarchy:
+        ROLE_ADMIN: [ROLE_AGENT]
+        ROLE_AGENT: [ROLE_USER]
+    
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/agent, roles: ROLE_AGENT }
 
 when@test:
     security:

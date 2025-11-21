@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tickets - Espace Agent{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+
+    <h1 class="mb-4">Tickets en cours</h1>
+
+    <form method="get" class="row g-3">
+
+        <div class="col-md-4">
+            <label class="form-label">Filtrer par statut</label>
+            <select name="statut" class="form-select">
+                <option value="Tous">Tous</option>
+                <option value="Nouveau" {{ statut == 'Nouveau' ? 'selected' }}>Nouveau</option>
+                <option value="Ouvert" {{ statut == 'Ouvert' ? 'selected' }}>Ouvert</option>
+                <option value="Résolu" {{ statut == 'Résolu' ? 'selected' }}>Résolu</option>
+                <option value="Fermé" {{ statut == 'Fermé' ? 'selected' }}>Fermé</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Filtrer par responsable</label>
+            <select name="responsable" class="form-select">
+                <option value="Tous">Tous</option>
+                {% for r in responsables %}
+                    <option value="{{ r.responsable }}" {{ responsable == r.responsable ? 'selected' }}>
+                        {{ r.responsable }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Filtrer</button>
+        </div>
+
+    </form>
+
+    <hr>
+
+    {# CAS 1: la table ticket est vide #}
+    {% if totalTickets == 0 %}
+        <div class="alert alertInfo mt-3">
+            Aucun ticket en cours
+        </div>
+
+    {# CAS 2: la table ticket n'est pas vide mais aucun ne correspond à la sélection #}
+    {% elseif tickets is empty %}
+        <div class="alert alert-warning mt-3">
+            Aucun ticket ne correspond aux filtres sélectionnés
+        </div>
+
+    {# CAS 3: Il y a des tickets correspondants aux filtres #}    
+    {% else %}
+
+        <table class="table table-striped align-middle">
+
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Auteur</th>
+                    <th>Catégorie</th>
+                    <th>Description</th>
+                    <th>Statut</th>
+                    <th>Responsable</th>
+                    <th>Ouvert le :</th>
+                    <th>Fermé le :</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr>
+                        <td>{{ ticket.id }}</td>
+                        <td>{{ ticket.auteur }}</td>
+                        <td>{{ ticket.categorie }}</td>
+                        <td>{{ ticket.description }}</td>
+                        <td>
+                            <span class="badge
+                                {% if ticket.statut == 'Nouveau' %} bg-secondary
+                                {% elseif ticket.statut == 'Ouvert' %} bg-primary
+                                {% elseif ticket.statut == 'Résolu' %} bg-success
+                                {% elseif ticket.statut == 'Fermé' %} bg-dark
+                                {% endif %}
+                            ">
+                                {{ ticket.statut }}
+                            </span>   
+                        </td>
+                        <td>
+                            {% if ticket.responsable %}
+                                {{ ticket.responsable }}
+                            {% else %}
+                                <span class="text-muted">Aucun</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ ticket.dateOuverture|date('d/m/Y H:i') }}</td>
+                        <td>
+                            {% if ticket.dateCloture %}
+                                {{ ticket.dateCloture|date('d/m/Y H:i') }}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('agent_ticket_edit', {id: ticket.id}) }}" class="btn btn-sm btn-outline-primary">                               
+                                Modifier
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

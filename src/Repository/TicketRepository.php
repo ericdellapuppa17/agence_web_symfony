@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Ticket;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,36 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
-    //    /**
-    //     * @return Ticket[] Returns an array of Ticket objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('t.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Retourne les tickets filtrés
+     */
+    public function findByFilters(?string $statut, ?string $responsable): array
+    {
+        $qb = $this->createQueryBuilder('t');
 
-    //    public function findOneBySomeField($value): ?Ticket
-    //    {
-    //        return $this->createQueryBuilder('t')
-    //            ->andWhere('t.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        if ($statut) {
+            $qb->andWhere('t.statut = :statut')
+               ->setParameter('statut', $statut);
+        }
+
+        if ($responsable) {
+            $qb->andWhere('t.responsable = :responsable')
+               ->setParameter('responsable', $responsable);
+        }
+
+        return $qb->orderBy('t.dateOuverture', 'DESC')
+                  ->getQuery()
+                  ->getResult();
+    }
+
+    public function findDistinctResponsables()
+    {
+        return $this->createQueryBuilder('t')
+                    ->select('DISTINCT t.responsable')
+                    ->where('t.responsable IS NOT NULL')
+                    ->orderBy('t.responsable', 'ASC')
+                    ->getQuery()
+                    ->getResult();
+    }
+    
 }

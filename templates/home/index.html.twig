@@ -5,7 +5,7 @@
 
 {% block body %}
 
-{% form_theme form 'bootstrap_5_layout.html.twig' %}
+{# {% form_theme form 'bootstrap_5_layout.html.twig' %} #}
 
 <div class="container mt-5">
 
@@ -17,21 +17,15 @@
     {# Affichage du formulaire #}
     <div class="card p-4 shadow-sm">
 
-
-        {{ form_start(form) }}
-
-            {# <div class="alert alert-danger">
-                {{ form_errors(form) }}
-                {{ form_errors(form.description) }}
-            </div> #}
+        {{ form_start(form) }}                   
 
             <div class="mb-3">
-                {{ form_row(form.auteur) }}         
+                {{ form_row(form.auteur) }}          
             </div>
 
             <div class="mb-3">
-                {{ form_row(form.categorie) }}   
-            </div>
+                {{ form_row(form.categorie) }} 
+            </div>  
 
             <div class="mb-3">
                 {{ form_row(form.description) }}
@@ -40,6 +34,7 @@
             <button type="submit" class="btn btn-secondary">Envoyer</button>
 
         {{ form_end(form) }}
+
     </div>
 
     {# Bouton de connexion #}
