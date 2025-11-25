@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\Categorie;
+use App\Entity\Statut;
+use App\Entity\Responsable;
 use App\Repository\TicketRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -48,22 +50,21 @@ class Ticket
     #[Assert\NotNull(message: "Veuillez sélectionner une catégorie !")]
     private ?Categorie $categorie = null;
 
-    // statut ( avec valeur par défaut 'Ouvert' à la création )
-    #[ORM\Column(length: 50)]
-    #[Assert\NotBlank(message: "Un statut est requis !")]
-    #[Assert\Length(max: 50, maxMessage: "Le statut be peut dépasser {{ limit }} caractères !")]
-    private ?string $statut = null;
+    // statut ( avec valeur par défaut 'Nouveau' à la création et lien avec la table statut)
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: "Veuillez sélectionner un statut !")]
+    private ?Statut $statut = null;
 
-    // responsable ( à assigner )
-    #[ORM\Column(length: 150, nullable: true)]
-    #[Assert\Length(max: 250, maxMessage: "Le nom du responsable ne peut dépasser {{ limit }} caractères !")]
-    private ?string $responsable = null;
+    // responsable ( à assigner en relation avec la table responsable )
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]    
+    private ?Responsable $responsable = null;
 
     public function __construct()
     {
         // Initialisation à la création du ticket
         $this->dateOuverture = new \DateTimeImmutable();
-        $this->statut = 'Nouveau';
     }
 
     public function getId(): ?int
@@ -131,24 +132,24 @@ class Ticket
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getStatut(): ?Statut
     {
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(?Statut $statut): static
     {
         $this->statut = $statut;
 
         return $this;
     }
 
-    public function getResponsable(): ?string
+    public function getResponsable(): ?Responsable
     {
         return $this->responsable;
     }
 
-    public function setResponsable(?string $responsable): static
+    public function setResponsable(?Responsable $responsable): static
     {
         $this->responsable = $responsable;
 

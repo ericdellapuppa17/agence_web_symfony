@@ -1,22 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tickets - Espace Agent{% endblock %}
+{% block title %}Gestion des tickets{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
 
     <h1 class="mb-4">Tickets en cours</h1>
 
-    
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary btn-sm mb-3">
-            ← Retour à l'administration
-        </a>
-    {% endif %}
+    <a href="{{ path('admin_dashboard') }}" class="btn btn-secondary btn-sm mb-3">
+        ← Retour à l'administration
+    </a>
 
+
+    <!-- Filtres -->
     <form method="get" class="row g-3">
 
-        {# Filtre par statut #}
         <div class="col-md-4">
             <label class="form-label">Filtrer par statut</label>
             <select name="statut" class="form-select">
@@ -29,7 +27,6 @@
             </select>
         </div>
 
-        {# Filtre par responsable #}
         <div class="col-md-4">
             <label class="form-label">Filtrer par responsable</label>
             <select name="responsable" class="form-select">
@@ -89,19 +86,20 @@
                         <td>{{ ticket.categorie }}</td>
                         <td>{{ ticket.description }}</td>
                         <td>
+                            {% set s = ticket.statut.libelle %}
                             <span class="badge
-                                {% if ticket.statut.libelle == 'Nouveau' %} bg-secondary
-                                {% elseif ticket.statut.libelle == 'Ouvert' %} bg-primary
-                                {% elseif ticket.statut.libelle == 'Résolu' %} bg-success
-                                {% elseif ticket.statut.libelle == 'Fermé' %} bg-dark
+                                {% if s == 'Nouveau' %} bg-secondary
+                                {% elseif s == 'Ouvert' %} bg-primary
+                                {% elseif s == 'Résolu' %} bg-success
+                                {% elseif s == 'Fermé' %} bg-dark
                                 {% endif %}
                             ">
-                                {{ ticket.statut.libelle }}
+                                {{ s }}
                             </span>   
                         </td>
                         <td>
                             {% if ticket.responsable %}
-                                {{ ticket.responsable }}
+                                {{ ticket.responsable.nom }}
                             {% else %}
                                 <span class="text-muted">Aucun</span>
                             {% endif %}
@@ -115,7 +113,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('agent_ticket_edit', {id: ticket.id}) }}" class="btn btn-sm btn-outline-primary">                               
+                            <a href="{{ path('admin_ticket_edit', {id: ticket.id}) }}" class="btn btn-sm btn-outline-primary">                               
                                 Modifier
                             </a>
                         </td>

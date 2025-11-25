@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier le ticket #{{ ticket.id }}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">Modifier le ticket #{{ ticket.id }}</h1>
+
+    <a href="{{ path('admin_ticket_index') }}" class="btn btn-secondary mb-3">
+        ← Retour à la liste
+    </a>
+
+    <div class="card shadow-sm p-4">
+
+        <div class="card-body">
+        
+            <div class="row mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Auteur :</label>
+                    <p>{{ ticket.auteur }}</p>                    
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Catégorie :</label>
+                    <p>{{ ticket.categorie }}</p>                    
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Responsable :</label>
+                    <p>{{ ticket.responsable }}</p>                    
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Description :</label>
+                <p>{{ ticket.description }}</p>
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Statut actuel :</label><br>
+                    <span class="badge
+                        {% if ticket.statut.libelle == 'Nouveau' %} bg-secondary
+                        {% elseif ticket.statut.libelle == 'Ouvert' %} bg-primary
+                        {% elseif ticket.statut.libelle == 'Résolu' %} bg-success
+                        {% elseif ticket.statut.libelle == 'Fermé' %} bg-dark
+                        {% endif %}
+                    ">
+                        {{ ticket.statut.libelle }}
+                    </span>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Ouvert le :</label>
+                    <p>{{ ticket.dateOuverture|date('d/m/Y H:i') }}</p>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Fermé le :</label>
+                    {% if ticket.dateCloture %}
+                        <p>{{ ticket.dateCloture|date('d/m/Y H:i') }}</p>
+                    {% else %}
+                        <p class="text-muted">-</p>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <hr>
+
+            {{ form_start(form) }}
+                <h5 class="mb-3">Mettre à jour le statut</h5>
+                <div class="mb-3">
+                    {{ form_row(form.statut) }}
+                </div>
+
+                <hr>
+
+                <h5 class="mb-3">Mettre à jour le responsable</h5>
+                <div class="mb-3">
+                    {{ form_row(form.responsable) }}
+                </div>
+
+                <button class="btn btn-primary">Enregistrer</button>
+
+            {{ form_end(form) }}
+        
+        </div>
+
+    </div>    
+
+</div>
+
+{% endblock %}

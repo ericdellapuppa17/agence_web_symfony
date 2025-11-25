@@ -10,14 +10,21 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\TicketPublicType;
 use App\Entity\Ticket;
+use App\Repository\StatutRepository;
 
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'home', methods: ['GET', 'POST'])]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, StatutRepository $statutRepository): Response
     {
         // formulaire de saisie de ticket client
         $ticket = new Ticket();
+
+        // récupération du statut 'Nouveau' pour initialisation par défaut
+        $statutDefaut = $statutRepository->findOneBy(['libelle' => 'Nouveau']);
+        if ($statutDefaut) {
+            $ticket->setStatut($statutDefaut);
+        }
 
         $form = $this->createForm(TicketPublicType::class, $ticket);
         $form->handleRequest($request);

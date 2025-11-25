@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Ticket;
 use App\Form\AgentTicketType;
 use App\Repository\TicketRepository;
+use App\Repository\StatutRepository;
+use App\Repository\ResponsableRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +17,12 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AgentTicketController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(Request $request, TicketRepository $repo): Response
+    public function index(
+        Request $request, 
+        TicketRepository $repo, 
+        StatutRepository $statutRepo,
+        ResponsableRepository $responsableRepo
+    ): Response
     {
         $statut = $request->query->get('statut');
         $responsable = $request->query->get('responsable');
@@ -30,16 +37,18 @@ final class AgentTicketController extends AbstractController
             $responsable = null;
         }
 
-        $tickets = $repo->findByFilters($statut, $responsable);
-
-        // remplir le menu déroulant des responsables
-        $responsables = $repo->findDistinctResponsables();
+        // filtrage
+        $tickets = $repo->findByFilters(
+            $statut ? (int)$statut : null, 
+            $responsable ? (int)$responsable : null
+        );
 
         return $this->render('agent_ticket/index.html.twig', [
             'tickets' => $tickets,
             'statut' => $statut,
+            'statuts' => $statutRepo->findAll(),
             'responsable' => $responsable,
-            'responsables' => $responsables,
+            'responsables' => $responsableRepo->findAll(),
             'totalTickets' => $totalTickets,
         ]);
     }
@@ -48,6 +57,7 @@ final class AgentTicketController extends AbstractController
     public function edit(Ticket $ticket, Request $request, EntityManagerInterface $em): Response
     {
         // Création du formulaire agent ( avec uniquement statut )
+
         $form = $this->createForm(AgentTicketType::class, $ticket);
         $form->handleRequest($request);
 
@@ -55,12 +65,14 @@ final class AgentTicketController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             // mise à jour automatique de la date de cloture si le choix est 'Fermé'
-            if ($ticket->getStatut() === 'Fermé') {
+            $statut = $ticket->getStatut();
+
+            if ($statut && $statut->getLibelle() === 'Fermé') {
                 $ticket->setDateCloture(new \DateTime());
             } else {
                 // cas où le ticket était fermé mais on le modifie
                 $ticket->setDateCloture(null);
-            }
+            }   
 
             $em->flush();
 

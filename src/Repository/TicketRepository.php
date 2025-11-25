@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Responsable;
 use App\Entity\Ticket;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,18 +21,21 @@ class TicketRepository extends ServiceEntityRepository
     /**
      * Retourne les tickets filtrés
      */
-    public function findByFilters(?string $statut, ?string $responsable): array
+    public function findByFilters(?int $statutId, ?int $responsableId): array
     {
-        $qb = $this->createQueryBuilder('t');
+        $qb = $this->createQueryBuilder('t')
+                   ->leftJoin('t.statut', 's')
+                   ->leftJoin('t.responsable', 'r')
+                   ->addSelect('s', 'r');
 
-        if ($statut) {
-            $qb->andWhere('t.statut = :statut')
-               ->setParameter('statut', $statut);
+        if ($statutId) {
+            $qb->andWhere('s.id = :statut')
+               ->setParameter('statut', $statutId);
         }
 
-        if ($responsable) {
-            $qb->andWhere('t.responsable = :responsable')
-               ->setParameter('responsable', $responsable);
+        if ($responsableId) {
+            $qb->andWhere('r.id = :responsable')
+               ->setParameter('responsable', $responsableId);
         }
 
         return $qb->orderBy('t.dateOuverture', 'DESC')
@@ -42,9 +46,11 @@ class TicketRepository extends ServiceEntityRepository
     public function findDistinctResponsables()
     {
         return $this->createQueryBuilder('t')
-                    ->select('DISTINCT t.responsable')
-                    ->where('t.responsable IS NOT NULL')
-                    ->orderBy('t.responsable', 'ASC')
+                    ->leftJoin('t.responsable', 'r')
+                    ->addSelect('r')
+                    ->where('r IS NOT NULL')
+                    ->groupBy('r.id')
+                    ->orderBy('r.nom', 'ASC')
                     ->getQuery()
                     ->getResult();
     }

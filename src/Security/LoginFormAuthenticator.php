@@ -67,9 +67,22 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // redirection par défaut sur tableau de bord Agent
-        return new RedirectResponse($this->urlGenerator->generate('agent_ticket_index'));
-        // throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        // Récupération des rôles de l'utilisateur connecté
+        $roles = $token->getRoleNames();
+
+        // Redirection pour ADMIN
+        if (in_array('ROLE_ADMIN', $roles)) {
+            return new RedirectResponse($this->urlGenerator->generate('admin_dashboard'));
+        }
+
+        // redirection pour AGENT
+        if (in_array('ROLE_AGENT', $roles)) {
+            return new RedirectResponse($this->urlGenerator->generate('agent_ticket_index'));
+        }
+
+        // redirection par défaut, simple utilisateur
+        return new RedirectResponse($this->urlGenerator->generate('home'));
+        
     }
 
     protected function getLoginUrl(Request $request): string

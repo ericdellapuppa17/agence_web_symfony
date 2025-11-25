@@ -17,7 +17,7 @@
 
             <nav class="navbar navbar-light bg-light border-bottom mb-4 px-3">
                 <span class="navbar-text">
-                    Bonjour <strong>{{ app.user.email }}</strong>
+                    Bienvenue <strong>{{ app.user.email }}</strong>
                 </span>
                 <form action="{{ path('app_logout') }}" method="post" class="m-0">
                     <button class="btn btn-danger btn-sm">
@@ -29,5 +29,9 @@
         {% endif %}
 
         {% block body %}{% endblock %}
+
+        {# Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptatum 
+        sequi esse itaque ut rerum laboriosam eaque tempora ipsa, voluptatem aut 
+        alias voluptate eos cumque est quae nemo autem tempore? Dolore? #}
     </body>
 </html>
