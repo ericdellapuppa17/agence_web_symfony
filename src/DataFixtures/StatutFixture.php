@@ -20,8 +20,8 @@ class StatutFixture extends Fixture
         foreach ($statuts as $libelle) {
             $statut = new Statut();
             $statut->setLibelle($libelle);
-
             $manager->persist($statut);
+            $this->addReference($libelle, $statut);
         }
 
         $manager->flush();

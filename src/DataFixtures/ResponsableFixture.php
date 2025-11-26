@@ -20,8 +20,8 @@ class ResponsableFixture extends Fixture
         foreach ($responsables as $nom) {
             $responsable = new Responsable();
             $responsable->setNom($nom);
-
             $manager->persist($responsable);
+            $this->addReference($nom, $responsable);
         }
 
         $manager->flush();
