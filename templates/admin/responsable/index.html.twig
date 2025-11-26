@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des catégories{% endblock %}
+{% block title %}Gestion des responsables{% endblock %}
 
 {% block body %}
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Gestion des catégories</h1>
+    <h1 class="mb-4">Gestion des responsables</h1>
 
     {# Messages Flash #}
     {% for type, messages in app.flashes %}
@@ -24,13 +24,13 @@
 
     <div class="row">
 
-        {# Liste des catégories #}
+        {# Liste des responsables #}
         <div class="col-md-8">
 
             <div class="card shadow-sm">
 
                 <div class="card-header bg-secondary text-white">
-                    <strong>Liste des catégories</strong>
+                    <strong>Liste des responsables</strong>
                 </div>
 
                 <div class="card-body p-0">
@@ -44,15 +44,15 @@
                         </thead>
 
                         <tbody>
-                            {% for c in categories %}
+                            {% for r in responsables %}
                                 <tr>
-                                    <td>{{ c.nom }}</td>
+                                    <td>{{ r.nom }}</td>
                                     <td>
-                                        <a href="{{ path('admin_categorie_edit', {id: c.id}) }}" class="btn btn-warning btn-sm me-2">
+                                        <a href="{{ path('admin_responsable_edit', {id: r.id}) }}" class="btn btn-warning btn-sm me-2">
                                             <i class="bi bi-pencil"></i> Modifier
                                         </a>
 
-                                        <a href="{{ path('admin_categorie_delete', {id: c.id}) }}" onclick="return confirm('Supprimer cette catégorie ?');" class="btn btn-danger btn-sm">
+                                        <a href="{{ path('admin_responsable_delete', {id: r.id}) }}" onclick="return confirm('Supprimer ce responsable ?');" class="btn btn-danger btn-sm">
                                             <i class="bi bi-trash"></i> Supprimer
                                         </a>
                                     </td>
@@ -60,7 +60,7 @@
                             {% else %}
                                 <tr>
                                     <td class="text-center text-muted py-3">
-                                        Aucune catégorie trouvée !
+                                        Aucun responsable trouvé !
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -79,7 +79,7 @@
             <div class="card shadow-sm mb-4">
             
                 <div class="card-header bg-primary text-white">
-                    <strong>{{ editMode ? 'Modifier la catégorie : ' ~ current.nom : 'Créer une catégorie' }}</strong>
+                    <strong>{{ editMode ? 'Modifier le responsable : ' ~ current.nom : 'Créer un responsable' }}</strong>
                 </div>
 
                 <div class="card-body">
@@ -96,7 +96,7 @@
 
                         {# annuler en mode édition #}
                         {% if editMode %}
-                            <a href="{{ path('admin_categorie_index') }}" class="btn btn-secondary w-100 mt-2">
+                            <a href="{{ path('admin_responsable_index') }}" class="btn btn-secondary w-100 mt-2">
                                 <i class="bi bi-x-circle me-2"></i> Annuler
                             </a>
                         {% endif %}

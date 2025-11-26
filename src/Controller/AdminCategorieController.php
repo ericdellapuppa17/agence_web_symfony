@@ -28,6 +28,7 @@ class AdminCategorieController extends AbstractController
             $em->persist($categorie);
             $em->flush();
 
+            $this->addFlash('success', 'Catégorie ajoutée');
             return $this->redirectToRoute('admin_categorie_index');
         }
 
@@ -50,6 +51,7 @@ class AdminCategorieController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
+            $this->addFlash('success', 'Catégorie modifiée');
             return $this->redirectToRoute('admin_categorie_index');
         }
 

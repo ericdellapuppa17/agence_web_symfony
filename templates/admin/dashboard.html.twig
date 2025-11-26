@@ -22,7 +22,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Tickets</h5>
                         <p class="card-text text-muted">Voir et gérer tous les tickets</p>
-                        <a href="{{ path('admin_ticket_index') }}" class="btn btn-primary w-100">Gestion des tickets</a>
+                        <a href="{{ path('admin_ticket_index') }}" class="btn btn-primary w-100"><i class="bi bi-ticket-detailed"></i> Gestion des tickets</a>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Catégories</h5>
                         <p class="card-text text-muted">Créer et modifier les catégories</p>
-                        <a href="{{ path('admin_categorie_index') }}" class="btn btn-primary w-100">Gestion des catégories</a>
+                        <a href="{{ path('admin_categorie_index') }}" class="btn btn-primary w-100"><i class="bi bi-tags"></i> Gestion des catégories</a>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Statuts</h5>
                         <p class="card-text text-muted">Paramétrer les statuts disponibles</p>
-                        <a href="#" class="btn btn-primary w-100">Gestion des statuts</a>
+                        <a href="{{ path('admin_statut_index') }}" class="btn btn-primary w-100"><i class="bi bi-ui-checks-grid"></i> Gestion des statuts</a>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
                     <div class="card-body text-center">
                         <h5 class="card-title">Responsables</h5>
                         <p class="card-text text-muted">Ajouter et modifier des responsables</p>
-                        <a href="#" class="btn btn-primary w-100">Gestion des responsables</a>
+                        <a href="{{ path('admin_responsable_index') }}" class="btn btn-primary w-100"><i class="bi bi-people"></i> Gestion des responsables</a>
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
 
         <div class="text-center mt-5">
             <a href="{{ path('agent_ticket_index') }}" class="btn btn-secondary">
-                Accéder à l'interface Agent
+                <i class="bi bi-person-vcard"></i> Accéder à l'interface Agent
             </a>
         </div>
     

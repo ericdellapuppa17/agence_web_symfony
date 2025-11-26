@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des catégories{% endblock %}
+{% block title %}Gestion des statuts{% endblock %}
 
 {% block body %}
 
 <div class="container mt-5">
 
-    <h1 class="mb-4">Gestion des catégories</h1>
+    <h1 class="mb-4">Gestion des statuts</h1>
 
     {# Messages Flash #}
     {% for type, messages in app.flashes %}
@@ -24,13 +24,13 @@
 
     <div class="row">
 
-        {# Liste des catégories #}
+        {# Liste des statuts #}
         <div class="col-md-8">
 
             <div class="card shadow-sm">
 
                 <div class="card-header bg-secondary text-white">
-                    <strong>Liste des catégories</strong>
+                    <strong>Liste des statuts</strong>
                 </div>
 
                 <div class="card-body p-0">
@@ -38,21 +38,21 @@
 
                         <thead class="table-light">
                             <tr>
-                                <th>Nom</th>
+                                <th>Libellé</th>
                                 <th style="width: 30%;">Actions</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                            {% for c in categories %}
+                            {% for s in statuts %}
                                 <tr>
-                                    <td>{{ c.nom }}</td>
+                                    <td>{{ s.libelle }}</td>
                                     <td>
-                                        <a href="{{ path('admin_categorie_edit', {id: c.id}) }}" class="btn btn-warning btn-sm me-2">
+                                        <a href="{{ path('admin_statut_edit', {id: s.id}) }}" class="btn btn-warning btn-sm me-2">
                                             <i class="bi bi-pencil"></i> Modifier
                                         </a>
 
-                                        <a href="{{ path('admin_categorie_delete', {id: c.id}) }}" onclick="return confirm('Supprimer cette catégorie ?');" class="btn btn-danger btn-sm">
+                                        <a href="{{ path('admin_statut_delete', {id: s.id}) }}" onclick="return confirm('Supprimer ce statut ?');" class="btn btn-danger btn-sm">
                                             <i class="bi bi-trash"></i> Supprimer
                                         </a>
                                     </td>
@@ -60,7 +60,7 @@
                             {% else %}
                                 <tr>
                                     <td class="text-center text-muted py-3">
-                                        Aucune catégorie trouvée !
+                                        Aucun statut trouvé !
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -79,12 +79,12 @@
             <div class="card shadow-sm mb-4">
             
                 <div class="card-header bg-primary text-white">
-                    <strong>{{ editMode ? 'Modifier la catégorie : ' ~ current.nom : 'Créer une catégorie' }}</strong>
+                    <strong>{{ editMode ? 'Modifier le statut : ' ~ current.libelle : 'Créer un statut' }}</strong>
                 </div>
 
                 <div class="card-body">
                     {{ form_start(form) }}
-                        {{ form_row(form.nom) }}
+                        {{ form_row(form.libelle) }}
 
                         <button class="btn btn-primary w-100 mt-3">
                             {% if editMode %}
@@ -96,7 +96,7 @@
 
                         {# annuler en mode édition #}
                         {% if editMode %}
-                            <a href="{{ path('admin_categorie_index') }}" class="btn btn-secondary w-100 mt-2">
+                            <a href="{{ path('admin_statut_index') }}" class="btn btn-secondary w-100 mt-2">
                                 <i class="bi bi-x-circle me-2"></i> Annuler
                             </a>
                         {% endif %}

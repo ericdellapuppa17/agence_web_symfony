@@ -10,7 +10,7 @@ class CategorieFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // catégories initiales ( pourront être modifiées )
+        // catégories initiales
         $categories = [
             'Incident',
             'Panne',
